@@ -247,8 +247,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04388390002c25d45ae4e5a64560ef42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Columns: 50
-  Rows: 50
+  Columns: 10
+  Rows: 10
   TileSize: 1.25
   Cell: {fileID: 8723992106031510329, guid: 84fe8d9ac8a520b48b4f1dfda253b42c, type: 3}
   Camera: {fileID: 519420031}
