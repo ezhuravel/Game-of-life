@@ -16,9 +16,7 @@ public class CameraManager : MonoBehaviour
     void Update()
     {
         var camSize = Camera.main.orthographicSize;
-
-        camSize += Input.GetAxis("Mouse ScrollWheel") * ZoomSensitivity;
-     
+        camSize += -1 * Input.GetAxis("Mouse ScrollWheel") * ZoomSensitivity;
         Camera.main.orthographicSize = camSize;
     }
 }

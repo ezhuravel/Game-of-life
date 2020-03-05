@@ -8,7 +8,7 @@ public class BoardManager : MonoBehaviour
     public int Rows = 0;
     public float TileSize = 1;
 
-    public GameObject Sprite;
+    public GameObject Cell;
     public float[,] Grid;
     public Camera Camera;
 
@@ -18,17 +18,15 @@ public class BoardManager : MonoBehaviour
         Grid = new float[Columns, Rows];
         Camera.orthographicSize = Rows / 2 ;
 
-       // GameObject cellRef = (GameObject)Instantiate(Resources.Load("Cell"));
         for (int i = 0; i < Rows; i++)
         {
             for (int j = 0; j < Columns; j++)
             {
-                GameObject cell = (GameObject)Instantiate(Sprite, transform);
+                GameObject cell = Instantiate(Cell, transform);
+                cell.name = $"Cell: i:{i} j{j}";
                 cell.transform.position = new Vector2(j * TileSize, i * -TileSize);
             }
         }
-
-
       
         float gridW = Columns * TileSize;
         float gridH = Rows * TileSize;

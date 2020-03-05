@@ -160,6 +160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1487066a0613f7647a7a98484ec84c3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ZoomSensitivity: 5
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -249,7 +250,7 @@ MonoBehaviour:
   Columns: 50
   Rows: 50
   TileSize: 1.25
-  Sprite: {fileID: 8723992106031510329, guid: 84fe8d9ac8a520b48b4f1dfda253b42c, type: 3}
+  Cell: {fileID: 8723992106031510329, guid: 84fe8d9ac8a520b48b4f1dfda253b42c, type: 3}
   Camera: {fileID: 519420031}
 --- !u!4 &2039865870
 Transform:
