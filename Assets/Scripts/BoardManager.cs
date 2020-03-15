@@ -52,31 +52,26 @@ public class BoardManager : MonoBehaviour
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
 
-            RaycastHit2D[] hits = Physics2D.RaycastAll(mousePos2D, Vector2.zero);
+            RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
 
-            if (hits.Any())
+            if (hit.collider != null)
             {
-                var liveCells = hits.Where(x => x.collider.gameObject.CompareTag("Live"));
+                var cell = hit.collider.gameObject.GetComponent<Tile>() ;
 
-                if (liveCells.Any())
+                if (cell.IsAlive())
                 {
-                    foreach(var liveCell in liveCells)
-                    {
-                        DeleteCell(liveCell.collider.gameObject);
-                    }
+                    cell.Die();
                 }
                 else
                 {
-                    var emptyCell = hits.FirstOrDefault(x => x.collider.gameObject.CompareTag("Empty"));
-                    SpawnCell(emptyCell.collider.gameObject);                   
-                }
+                    cell.Born();
+                }               
             }
         }
 
         // pause game
         if (Input.GetKeyDown(KeyCode.Space))
-        {
-            TakeStep();
+        {          
             paused = paused ? false : true;
         }
 
@@ -84,76 +79,49 @@ public class BoardManager : MonoBehaviour
         if (elapsed >= GameSpeed && !paused)
         {
             elapsed = elapsed % 1f;
-           // TakeStep();
+            TakeStep();
         }
     }
 
     private void TakeStep()
     {
-        var deleteList = new List<GameObject>();
-        var spawnList = new List<GameObject>();
-
-        var counter = 0;
+        var killList = new List<Tile>();
+        var bornList = new List<Tile>();
 
         //// Determine which cells live and which cell Dies in the next step (generation)
         foreach (Transform t in transform)
         {        
             
             var tileScript = t.GetComponent<Tile>();
-            var adjacentLiveCellCount = tileScript.AdjacentLiveCells();
+            var adjacentLiveCellCount = tileScript.AdjacentLiveCells();            
 
-            if (t.CompareTag("Live"))
+            if (tileScript.IsAlive())
             {
                 if (adjacentLiveCellCount < 2 || adjacentLiveCellCount > 3)
                 {
-                    deleteList.Add(t.gameObject);
+                    killList.Add(tileScript);
                 }
             }
             else
             {
                 if (adjacentLiveCellCount == 3)
                 {
-                    spawnList.Add(t.gameObject);
+                    bornList.Add(tileScript);
                 }
             }
-
-            counter++;
         }
 
 
-
-        foreach (var gameObject in deleteList)
+        foreach (var tile in killList)
         {
-            DeleteCell(gameObject);
+            tile.Die();
         }
 
-        foreach (var gameObject in spawnList)
+        foreach (var tile in bornList)
         {
-            SpawnCell(gameObject);
+            tile.Born();
         }
 
         Debug.Log("Step Complete");
-    }
-
-    /// <summary>
-    /// Removes the gameobject from the scene and from the Board array
-    /// </summary>
-    /// <param name="g">The game object to be deleted</param>
-    private void DeleteCell(GameObject g)
-    {     
-        Destroy(g);
-    }
-
-    /// <summary>
-    /// Created a gameobject where the empty cell g resides
-    /// </summary>
-    /// <param name="g"></param>
-    private void SpawnCell(GameObject g)
-    {
-        var tileComponent = g.GetComponent<Tile>();
-
-        GameObject liveCell = Instantiate(LiveCell, transform);
-        liveCell.name = $"Live Cell";
-        liveCell.transform.position = g.transform.position;
     }
 }
