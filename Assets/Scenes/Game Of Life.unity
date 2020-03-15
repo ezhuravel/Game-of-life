@@ -250,8 +250,12 @@ MonoBehaviour:
   Columns: 10
   Rows: 10
   TileSize: 1.25
-  Cell: {fileID: 8723992106031510329, guid: 84fe8d9ac8a520b48b4f1dfda253b42c, type: 3}
+  EmptyCell: {fileID: 4674908460979410888, guid: cfa300586b14eb94fa271b4c5f862aba,
+    type: 3}
+  LiveCell: {fileID: 8723992106031510329, guid: 84fe8d9ac8a520b48b4f1dfda253b42c,
+    type: 3}
   Camera: {fileID: 519420031}
+  GameSpeed: 1
 --- !u!4 &2039865870
 Transform:
   m_ObjectHideFlags: 0
