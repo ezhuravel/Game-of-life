@@ -90,8 +90,7 @@ public class BoardManager : MonoBehaviour
 
         //// Determine which cells live and which cell Dies in the next step (generation)
         foreach (Transform t in transform)
-        {        
-            
+        {                    
             var tileScript = t.GetComponent<Tile>();
             var adjacentLiveCellCount = tileScript.AdjacentLiveCells();            
 
@@ -111,7 +110,6 @@ public class BoardManager : MonoBehaviour
             }
         }
 
-
         foreach (var tile in killList)
         {
             tile.Die();
@@ -120,8 +118,6 @@ public class BoardManager : MonoBehaviour
         foreach (var tile in bornList)
         {
             tile.Born();
-        }
-
-        Debug.Log("Step Complete");
+        }    
     }
 }
