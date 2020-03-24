@@ -247,8 +247,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04388390002c25d45ae4e5a64560ef42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Columns: 50
-  Rows: 50
+  Columns: 10
+  Rows: 10
   TileSize: 1.25
   EmptyCell: {fileID: 4674908460979410888, guid: cfa300586b14eb94fa271b4c5f862aba,
     type: 3}

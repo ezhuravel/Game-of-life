@@ -38,7 +38,7 @@ public class BoardManager : MonoBehaviour
             for (int j = 0; j < Columns; j++)
             {
                 GameObject emptyTile = Instantiate(EmptyCell, transform);
-                emptyTile.name = $"EmptyTile";
+                emptyTile.name = $"Tile Row: {i} Column {j}";
                 emptyTile.transform.position = new Vector2(j * TileSize, i * -TileSize);
             }
         }
@@ -79,7 +79,21 @@ public class BoardManager : MonoBehaviour
         if (elapsed >= GameSpeed && !paused)
         {
             elapsed = elapsed % 1f;
-            TakeStep();
+            MoveCells();
+            TakeStep();            
+        }
+    }
+
+    private void MoveCells()
+    {
+        foreach (Transform t in transform)
+        {
+            var tileScript = t.GetComponent<Tile>();
+
+            if (tileScript.WillDie())
+            {
+                tileScript.Move();
+            }
         }
     }
 
@@ -91,23 +105,13 @@ public class BoardManager : MonoBehaviour
         //// Determine which cells live and which cell Dies in the next step (generation)
         foreach (Transform t in transform)
         {                    
-            var tileScript = t.GetComponent<Tile>();
-            var adjacentLiveCellCount = tileScript.AdjacentLiveCells();            
+            var tileScript = t.GetComponent<Tile>();          
 
-            if (tileScript.IsAlive())
-            {
-                if (adjacentLiveCellCount < 2 || adjacentLiveCellCount > 3)
-                {
-                    killList.Add(tileScript);
-                }
-            }
-            else
-            {
-                if (adjacentLiveCellCount == 3)
-                {
-                    bornList.Add(tileScript);
-                }
-            }
+            if(tileScript.WillDie())
+                killList.Add(tileScript);
+            
+            if(tileScript.WillBeBorn())
+                bornList.Add(tileScript);
         }
 
         foreach (var tile in killList)
