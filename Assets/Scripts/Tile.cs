@@ -13,7 +13,10 @@ public class Tile : MonoBehaviour
     private void Start()
     {
         sr = GetComponent<SpriteRenderer>();
-        Die();
+        if (alive)
+            Born();
+        else
+            Die();
     }
 
     /// <summary>
@@ -23,6 +26,12 @@ public class Tile : MonoBehaviour
     public bool IsAlive()
     {
         return alive;
+    }
+
+
+    public void SetAlive()
+    {
+        alive = true;
     }
 
     /// <summary>

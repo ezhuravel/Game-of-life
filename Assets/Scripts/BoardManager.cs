@@ -8,19 +8,17 @@ public class BoardManager : MonoBehaviour
     public int Columns = 0;
     public int Rows = 0;
     public float TileSize = 1;
-    public GameObject EmptyCell;
-    public GameObject LiveCell;
+    public GameObject CellGameObject;
     public Camera Camera;
     public float GameSpeed = 1;
+    public int seed;
 
     float elapsed = 0f;
-    //GameObject[,] Board;
     private bool paused = true;
+    bool moveStep = true;
  
     void Start()
     {
-       // Board = new GameObject[Rows, Columns];
-
         SetUpBoard();    
 
         Camera.orthographicSize = Columns / 2 ;
@@ -33,13 +31,22 @@ public class BoardManager : MonoBehaviour
 
     private void SetUpBoard()
     {
+        System.Random r = new System.Random(2);
+
         for (int i = 0; i < Rows; i++)
         {
             for (int j = 0; j < Columns; j++)
             {
-                GameObject emptyTile = Instantiate(EmptyCell, transform);
+                GameObject emptyTile = Instantiate(CellGameObject, transform);
                 emptyTile.name = $"Tile Row: {i} Column {j}";
                 emptyTile.transform.position = new Vector2(j * TileSize, i * -TileSize);
+
+                var tileScript = emptyTile.GetComponent<Tile>();
+
+                var val = r.Next(2);
+                if (val == 1)
+                    tileScript.SetAlive();
+
             }
         }
     }
@@ -79,8 +86,20 @@ public class BoardManager : MonoBehaviour
         if (elapsed >= GameSpeed && !paused)
         {
             elapsed = elapsed % 1f;
+            
             MoveCells();
-            TakeStep();            
+            TakeStep();
+            
+            //if (moveStep)
+            //{
+            //    MoveCells();
+            //    moveStep = false;
+            //}
+            //else
+            //{
+            //    TakeStep();
+            //    moveStep = true;
+            //}            
         }
     }
 
