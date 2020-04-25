@@ -45,7 +45,7 @@ public class BoardManager : MonoBehaviour
 
                 var val = r.Next(2);
                 if (val == 1)
-                    tileScript.SetAlive();
+                    tileScript.Alive = true;
 
             }
         }
@@ -65,7 +65,7 @@ public class BoardManager : MonoBehaviour
             {
                 var cell = hit.collider.gameObject.GetComponent<Tile>() ;
 
-                if (cell.IsAlive())
+                if (cell.Alive)
                 {
                     cell.Die();
                 }

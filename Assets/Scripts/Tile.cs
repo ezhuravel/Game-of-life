@@ -2,8 +2,7 @@
 using System.Linq;
 
 public class Tile : MonoBehaviour
-{
-    private bool alive = false;
+{   
     private bool moved = false;
     private SpriteRenderer sr;
 
@@ -13,7 +12,7 @@ public class Tile : MonoBehaviour
     private void Start()
     {
         sr = GetComponent<SpriteRenderer>();
-        if (alive)
+        if (Alive)
             Born();
         else
             Die();
@@ -23,23 +22,15 @@ public class Tile : MonoBehaviour
     /// Returns current tiles living status 
     /// </summary>
     /// <returns></returns>
-    public bool IsAlive()
-    {
-        return alive;
-    }
+    public bool Alive { get; set; }
 
-
-    public void SetAlive()
-    {
-        alive = true;
-    }
 
     /// <summary>
     /// Sets tile to dead
     /// </summary>
     public void Die()
     {
-        alive = false;
+        Alive = false;
         sr.color = Color.white;
     }
 
@@ -48,7 +39,7 @@ public class Tile : MonoBehaviour
     /// </summary>
     public void Born()
     {
-        alive = true;
+        Alive = true;
         sr.color = Color.blue;
     }
 
@@ -59,7 +50,7 @@ public class Tile : MonoBehaviour
     public int AdjacentLiveCells()
     {
         var collisions = Physics2D.OverlapBoxAll(gameObject.transform.position, new Vector2(2, 2), 0);
-        return collisions.Count(x => x.gameObject != gameObject && x.gameObject.GetComponent<Tile>().IsAlive());
+        return collisions.Count(x => x.gameObject != gameObject && x.gameObject.GetComponent<Tile>().Alive);
     }
 
     /// <summary>
@@ -70,7 +61,7 @@ public class Tile : MonoBehaviour
     {
         var adjacentLiveCellCount = AdjacentLiveCells();
 
-        return alive && (adjacentLiveCellCount < 2 || adjacentLiveCellCount > 3);
+        return Alive && (adjacentLiveCellCount < 2 || adjacentLiveCellCount > 3);
     }
 
     /// <summary>
@@ -81,7 +72,7 @@ public class Tile : MonoBehaviour
     {
         var adjacentLiveCellCount = AdjacentLiveCells();
 
-        return !alive && (adjacentLiveCellCount == 3);
+        return !Alive && (adjacentLiveCellCount == 3);
     }
 
     public bool HasMoved()
@@ -98,8 +89,8 @@ public class Tile : MonoBehaviour
             var tileScript = tile.GetComponent<Tile>();
             var adjacentLiveCellCount = tileScript.AdjacentLiveCells();
 
-            if (tile.gameObject != gameObject && !tileScript.IsAlive() && !tileScript.HasMoved() && adjacentLiveCellCount >= 2 && adjacentLiveCellCount < 4)
-            {                
+            if (tile.gameObject != gameObject && !tileScript.Alive && !tileScript.HasMoved() && adjacentLiveCellCount >= 2 && adjacentLiveCellCount < 4)
+            {               
                 Die();
                 tileScript.Born();
                 tileScript.moved = true;
