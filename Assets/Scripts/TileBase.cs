@@ -8,6 +8,7 @@ public abstract class TileBase : MonoBehaviour
     private SpriteRenderer sr;
 
     public bool Moved { get; set; }
+    public bool Alive { get; set; }
 
     /// <summary>
     /// Initializes title
@@ -21,13 +22,6 @@ public abstract class TileBase : MonoBehaviour
         else
             Die();
     }
-
-    /// <summary>
-    /// Returns current tiles living status 
-    /// </summary>
-    /// <returns></returns>
-    public bool Alive { get; set; }
-
 
     /// <summary>
     /// Sets tile to dead
