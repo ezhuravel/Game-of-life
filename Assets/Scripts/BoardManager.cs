@@ -12,13 +12,14 @@ public class BoardManager : MonoBehaviour
     public Camera Camera;
     public float GameSpeed = 1;
     public int seed;
+    public bool paused = false;
     public Text StepText;
     public Text AliveCellText;
     public Text DeadCellText;
     public Text Ratio;
 
     float elapsed = 0f;
-    private bool paused = false;
+   
     private int step = 0;
     private float ratio = 0;
     List<float> ratiosList;
