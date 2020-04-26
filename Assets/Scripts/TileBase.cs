@@ -1,16 +1,20 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
-public class Tile : MonoBehaviour
-{   
-    private bool moved = false;
+public abstract class TileBase : MonoBehaviour
+{
     private SpriteRenderer sr;
+
+    public bool Moved { get; set; }
 
     /// <summary>
     /// Initializes title
     /// </summary>
     private void Start()
     {
+        Moved = false;
         sr = GetComponent<SpriteRenderer>();
         if (Alive)
             Born();
@@ -50,7 +54,7 @@ public class Tile : MonoBehaviour
     public int AdjacentLiveCells()
     {
         var collisions = Physics2D.OverlapBoxAll(gameObject.transform.position, new Vector2(2, 2), 0);
-        return collisions.Count(x => x.gameObject != gameObject && x.gameObject.GetComponent<Tile>().Alive);
+        return collisions.Count(x => x.gameObject != gameObject && x.gameObject.GetComponent<TileBase>().Alive);
     }
 
     /// <summary>
@@ -75,33 +79,5 @@ public class Tile : MonoBehaviour
         return !Alive && (adjacentLiveCellCount == 3);
     }
 
-    public bool HasMoved()
-    {
-        return moved;
-    }
-
-    public void Move()
-    {
-        var collisions = Physics2D.OverlapBoxAll(gameObject.transform.position, new Vector2(2, 2), 0);
-
-        foreach (var tile in collisions)
-        {
-            var tileScript = tile.GetComponent<Tile>();
-            var adjacentLiveCellCount = tileScript.AdjacentLiveCells();
-
-            if (tile.gameObject != gameObject && !tileScript.Alive && !tileScript.HasMoved() && adjacentLiveCellCount >= 2 && adjacentLiveCellCount < 4)
-            {
-                Die();
-                tileScript.Born();
-                tileScript.moved = true;
-
-                break; // leave loop after move               
-            }
-        }
-    }
-
-    public void ResetMove()
-    {
-        moved = false;
-    }
+    public abstract void Move();
 }

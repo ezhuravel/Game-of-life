@@ -48,7 +48,7 @@ public class BoardManager : MonoBehaviour
                 emptyTile.name = $"Tile Row: {i} Column {j}";
                 emptyTile.transform.position = new Vector2(j * TileSize, i * -TileSize);
 
-                var tileScript = emptyTile.GetComponent<Tile>();
+                var tileScript = emptyTile.GetComponent<TileBase>();
 
                 var val = r.Next(2);
                 if (val == 1)
@@ -70,7 +70,7 @@ public class BoardManager : MonoBehaviour
 
             if (hit.collider != null)
             {
-                var cell = hit.collider.gameObject.GetComponent<Tile>() ;
+                var cell = hit.collider.gameObject.GetComponent<TileBase>() ;
 
                 if (cell.Alive)
                 {
@@ -107,7 +107,7 @@ public class BoardManager : MonoBehaviour
             TakeStep();
 
             var totalCells = Rows * Columns;
-            var liveCells = GetComponentsInChildren<Tile>().Count(x => x.Alive);
+            var liveCells = GetComponentsInChildren<TileBase>().Count(x => x.Alive);
             var deadCells = totalCells - liveCells;
 
             ratio = (float)liveCells / deadCells;
@@ -123,7 +123,7 @@ public class BoardManager : MonoBehaviour
     {
         foreach (Transform t in transform)
         {
-            var tileScript = t.GetComponent<Tile>();
+            var tileScript = t.GetComponent<TileBase>();
 
             if (tileScript.WillDie())
             {
@@ -134,13 +134,13 @@ public class BoardManager : MonoBehaviour
 
     private void TakeStep()
     {
-        var killList = new List<Tile>();
-        var bornList = new List<Tile>();
+        var killList = new List<TileBase>();
+        var bornList = new List<TileBase>();
 
         //// Determine which cells live and which cell Dies in the next step (generation)
         foreach (Transform t in transform)
         {                    
-            var tileScript = t.GetComponent<Tile>();          
+            var tileScript = t.GetComponent<TileBase>();          
 
             if(tileScript.WillDie())
                 killList.Add(tileScript);
