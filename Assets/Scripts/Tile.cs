@@ -82,7 +82,7 @@ public class Tile : MonoBehaviour
 
     public void Move()
     {
-        var collisions = Physics2D.OverlapBoxAll(gameObject.transform.position, new Vector2(2, 2), 0);        
+        var collisions = Physics2D.OverlapBoxAll(gameObject.transform.position, new Vector2(2, 2), 0);
 
         foreach (var tile in collisions)
         {
@@ -90,7 +90,7 @@ public class Tile : MonoBehaviour
             var adjacentLiveCellCount = tileScript.AdjacentLiveCells();
 
             if (tile.gameObject != gameObject && !tileScript.Alive && !tileScript.HasMoved() && adjacentLiveCellCount >= 2 && adjacentLiveCellCount < 4)
-            {               
+            {
                 Die();
                 tileScript.Born();
                 tileScript.moved = true;

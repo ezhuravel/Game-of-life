@@ -1,6 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System.Linq;
 
 public class BoardManager : MonoBehaviour
@@ -12,14 +12,21 @@ public class BoardManager : MonoBehaviour
     public Camera Camera;
     public float GameSpeed = 1;
     public int seed;
+    public Text StepText;
+    public Text AliveCellText;
+    public Text DeadCellText;
+    public Text Ratio;
 
     float elapsed = 0f;
-    private bool paused = true;
-    bool moveStep = true;
- 
+    private bool paused = false;
+    private int step = 0;
+    private float ratio = 0;
+    List<float> ratiosList;
+
     void Start()
-    {
-        SetUpBoard();    
+    {        
+        SetUpBoard();
+        ratiosList = new List<float>();
 
         Camera.orthographicSize = Columns / 2 ;
 
@@ -74,7 +81,7 @@ public class BoardManager : MonoBehaviour
                     cell.Born();
                 }               
             }
-        }
+        }        
 
         // pause game
         if (Input.GetKeyDown(KeyCode.Space))
@@ -82,24 +89,33 @@ public class BoardManager : MonoBehaviour
             paused = paused ? false : true;
         }
 
+        if(step == 100)
+        {
+            paused = true;
+            Ratio.text = $"Average Ratio: {ratiosList.Average()}";
+        }
+
         elapsed += Time.deltaTime;
         if (elapsed >= GameSpeed && !paused)
         {
+            step++;
+            StepText.text = $"Step: {step}"; 
+
             elapsed = elapsed % 1f;
             
             MoveCells();
             TakeStep();
-            
-            //if (moveStep)
-            //{
-            //    MoveCells();
-            //    moveStep = false;
-            //}
-            //else
-            //{
-            //    TakeStep();
-            //    moveStep = true;
-            //}            
+
+            var totalCells = Rows * Columns;
+            var liveCells = GetComponentsInChildren<Tile>().Count(x => x.Alive);
+            var deadCells = totalCells - liveCells;
+
+            ratio = (float)liveCells / deadCells;
+
+            AliveCellText.text = $"Live Cells: {liveCells}";
+            DeadCellText.text = $"Dead cells: {deadCells}";
+            Ratio.text = $"A/D: {ratio}";
+            ratiosList.Add(ratio);
         }
     }
 
