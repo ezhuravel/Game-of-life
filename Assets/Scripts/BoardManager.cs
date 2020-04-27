@@ -19,6 +19,7 @@ public class BoardManager : MonoBehaviour
     public Text AliveCellText;
     public Text DeadCellText;
     public Text Ratio;
+    public int pauseOn; 
 
     float elapsed = 0f;
    
@@ -199,7 +200,7 @@ public class BoardManager : MonoBehaviour
             paused = paused ? false : true;
         }
 
-        if(step == 100)
+        if(step == pauseOn)
         {
             paused = true;
             Ratio.text = $"Average Ratio: {ratiosList.Average()}";
