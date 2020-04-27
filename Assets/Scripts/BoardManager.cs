@@ -17,16 +17,18 @@ public class BoardManager : MonoBehaviour
     public Text AliveCellText;
     public Text DeadCellText;
     public Text Ratio;
-
+    
     float elapsed = 0f;
    
     private int step = 0;
     private float ratio = 0;
     List<float> ratiosList;
+    private bool first = true;
 
     void Start()
-    {        
-        SetUpBoard();
+    {
+        //SetUpBoard();
+        SetUpBoardWithCaves();
         ratiosList = new List<float>();
 
         Camera.orthographicSize = Columns / 2 ;
@@ -53,8 +55,66 @@ public class BoardManager : MonoBehaviour
 
                 var val = r.Next(2);
                 if (val == 1)
-                    tileScript.Alive = true;
+                    tileScript.tileState = TileState.Alive;
+                else
+                    tileScript.tileState = TileState.Dead;
+            }
+        }
+    }
 
+    private void SetUpBoardWithCaves()
+    {
+        RandomFillMap();       
+    }
+
+    private void SmoothMap()
+    {
+        var cells = GetComponentsInChildren<TileBase>();
+        foreach (var cell in cells)
+        {
+            var tileScript = cell.GetComponent<TileBase>();
+            int neighbourWallTiles = tileScript.AdjacentBarrierCell();
+
+            if (neighbourWallTiles > 4)
+                tileScript.SetBarrier();
+            else if (neighbourWallTiles < 4)
+                tileScript.Die();
+        }
+    }
+
+    private void RandomFillMap()
+    {
+        System.Random r = new System.Random(2);
+
+        for (int i = 0; i < Rows; i++)
+        {
+            for (int j = 0; j < Columns; j++)
+            {
+                GameObject emptyTile = Instantiate(CellGameObject, transform);
+                emptyTile.name = $"Tile Row: {i} Column {j}";
+                emptyTile.transform.position = new Vector2(j * TileSize, i * -TileSize);
+
+                var tileScript = emptyTile.GetComponent<TileBase>();
+                
+                var val = r.Next(2);
+
+                if (i == 0 || i == Rows - 1 || j == 0 || j == Rows - 1)
+                {
+                    tileScript.tileState = TileState.Barrier;
+                }
+                else
+                {
+                    tileScript.tileState = TileState.Dead;
+                    if (r.Next(0, 100) < 45)
+                    {
+                        tileScript.tileState = TileState.Barrier;
+                    }
+                }
+
+                //if (val == 1)
+                //    tileScript.tileState = TileState.Alive;
+                //else
+                //    tileScript.tileState = TileState.Dead;
             }
         }
     }
@@ -62,6 +122,16 @@ public class BoardManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (first)
+        {
+            for (int i = 0; i < 0; i++)
+            {
+                SmoothMap();
+            }
+            first = false;
+        }
+
+
         if (Input.GetMouseButtonDown(0))
         {
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -73,7 +143,7 @@ public class BoardManager : MonoBehaviour
             {
                 var cell = hit.collider.gameObject.GetComponent<TileBase>() ;
 
-                if (cell.Alive)
+                if (cell.tileState == TileState.Alive)
                 {
                     cell.Die();
                 }
@@ -108,7 +178,7 @@ public class BoardManager : MonoBehaviour
             TakeStep();
 
             var totalCells = Rows * Columns;
-            var liveCells = GetComponentsInChildren<TileBase>().Count(x => x.Alive);
+            var liveCells = GetComponentsInChildren<TileBase>().Count(x => x.tileState == TileState.Alive);
             var deadCells = totalCells - liveCells;
 
             ratio = (float)liveCells / deadCells;

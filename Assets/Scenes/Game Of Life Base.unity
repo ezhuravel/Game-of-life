@@ -785,12 +785,22 @@ PrefabInstance:
         type: 3}
       propertyPath: CellGameObject
       value: 
-      objectReference: {fileID: 499124607320715849, guid: 1011df8ee69079e478ffa65d2328798a,
+      objectReference: {fileID: 4674908460979410888, guid: cfa300586b14eb94fa271b4c5f862aba,
         type: 3}
     - target: {fileID: 2672118221578791798, guid: e9b1485ca1e97634b9a25f6ef98ed20e,
         type: 3}
       propertyPath: paused
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2672118221578791798, guid: e9b1485ca1e97634b9a25f6ef98ed20e,
+        type: 3}
+      propertyPath: Columns
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 2672118221578791798, guid: e9b1485ca1e97634b9a25f6ef98ed20e,
+        type: 3}
+      propertyPath: Rows
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 2672118221578791799, guid: e9b1485ca1e97634b9a25f6ef98ed20e,
         type: 3}

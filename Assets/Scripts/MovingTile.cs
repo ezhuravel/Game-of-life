@@ -12,7 +12,7 @@ public class MovingTile : TileBase
             var tileScript = tile.GetComponent<TileBase>();
             var adjacentLiveCellCount = tileScript.AdjacentLiveCells();
 
-            if (tile.gameObject != gameObject && !tileScript.Alive && !tileScript.Moved && adjacentLiveCellCount >= 2 && adjacentLiveCellCount < 4)
+            if (tile.gameObject != gameObject && tileScript.tileState == TileState.Dead && !tileScript.Moved && adjacentLiveCellCount >= 2 && adjacentLiveCellCount < 4)
             {
                 Die();
                 tileScript.Born();

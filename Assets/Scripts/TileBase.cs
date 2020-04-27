@@ -6,9 +6,9 @@ using UnityEngine;
 public abstract class TileBase : MonoBehaviour
 {
     private SpriteRenderer sr;
+    public TileState tileState { get; set; }
 
     public bool Moved { get; set; }
-    public bool Alive { get; set; }
 
     /// <summary>
     /// Initializes title
@@ -17,8 +17,10 @@ public abstract class TileBase : MonoBehaviour
     {
         Moved = false;
         sr = GetComponent<SpriteRenderer>();
-        if (Alive)
+        if (tileState == TileState.Alive)
             Born();
+        else if (tileState == TileState.Barrier)
+            SetBarrier();
         else
             Die();
     }
@@ -28,7 +30,7 @@ public abstract class TileBase : MonoBehaviour
     /// </summary>
     public void Die()
     {
-        Alive = false;
+        tileState = TileState.Dead;
         sr.color = Color.white;
     }
 
@@ -37,8 +39,14 @@ public abstract class TileBase : MonoBehaviour
     /// </summary>
     public void Born()
     {
-        Alive = true;
+        tileState = TileState.Alive;
         sr.color = Color.blue;
+    }
+
+    public void SetBarrier()
+    {
+        tileState = TileState.Barrier;
+        sr.color = Color.red;
     }
 
     /// <summary>
@@ -48,7 +56,13 @@ public abstract class TileBase : MonoBehaviour
     public int AdjacentLiveCells()
     {
         var collisions = Physics2D.OverlapBoxAll(gameObject.transform.position, new Vector2(2, 2), 0);
-        return collisions.Count(x => x.gameObject != gameObject && x.gameObject.GetComponent<TileBase>().Alive);
+        return collisions.Count(x => x.gameObject != gameObject && x.gameObject.GetComponent<TileBase>().tileState == TileState.Alive);
+    }
+
+    public int AdjacentBarrierCell()
+    {
+        var collisions = Physics2D.OverlapBoxAll(gameObject.transform.position, new Vector2(2, 2), 0);        
+        return collisions.Count(x => x.gameObject != gameObject && x.gameObject.GetComponent<TileBase>().tileState == TileState.Barrier);
     }
 
     /// <summary>
@@ -59,7 +73,7 @@ public abstract class TileBase : MonoBehaviour
     {
         var adjacentLiveCellCount = AdjacentLiveCells();
 
-        return Alive && (adjacentLiveCellCount < 2 || adjacentLiveCellCount > 3);
+        return tileState == TileState.Alive && (adjacentLiveCellCount < 2 || adjacentLiveCellCount > 3);
     }
 
     /// <summary>
@@ -70,7 +84,7 @@ public abstract class TileBase : MonoBehaviour
     {
         var adjacentLiveCellCount = AdjacentLiveCells();
 
-        return !Alive && (adjacentLiveCellCount == 3);
+        return tileState == TileState.Dead && (adjacentLiveCellCount == 3);
     }
 
     public abstract void Move();
