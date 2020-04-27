@@ -50,7 +50,10 @@ MonoBehaviour:
     type: 3}
   Camera: {fileID: 0}
   GameSpeed: 0.5
-  seed: 0
+  WithCaves: 1
+  seed: 2
+  fillPercent: 30
+  paused: 1
   StepText: {fileID: 0}
   AliveCellText: {fileID: 0}
   DeadCellText: {fileID: 0}

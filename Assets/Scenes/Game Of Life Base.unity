@@ -802,6 +802,11 @@ PrefabInstance:
       propertyPath: Rows
       value: 50
       objectReference: {fileID: 0}
+    - target: {fileID: 2672118221578791798, guid: e9b1485ca1e97634b9a25f6ef98ed20e,
+        type: 3}
+      propertyPath: fillPercent
+      value: 45
+      objectReference: {fileID: 0}
     - target: {fileID: 2672118221578791799, guid: e9b1485ca1e97634b9a25f6ef98ed20e,
         type: 3}
       propertyPath: m_Name
