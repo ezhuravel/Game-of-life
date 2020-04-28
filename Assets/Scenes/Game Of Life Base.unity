@@ -810,12 +810,17 @@ PrefabInstance:
     - target: {fileID: 2672118221578791798, guid: e9b1485ca1e97634b9a25f6ef98ed20e,
         type: 3}
       propertyPath: WithCaves
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2672118221578791798, guid: e9b1485ca1e97634b9a25f6ef98ed20e,
         type: 3}
       propertyPath: seed
       value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 2672118221578791798, guid: e9b1485ca1e97634b9a25f6ef98ed20e,
+        type: 3}
+      propertyPath: pauseOn
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 2672118221578791799, guid: e9b1485ca1e97634b9a25f6ef98ed20e,
         type: 3}
